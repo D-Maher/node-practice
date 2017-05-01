@@ -1,17 +1,11 @@
 var fs = require('fs');
 
 var contents = fs.readFileSync(process.argv[2])
+var lines = contents.toString().split('\n')
 
-var fileString = buffer.toString();
+console.log(lines.length - 1);
 
-var fileStringChars = fileString.split("");
 
-var newlineCounter = 0
-
-for (var i = 0; i < fileStringChars.length; i++) {
-  if (fileStringChars[i] === "\n") {
-    newlineCounter += 1
-  }
-}
-
-console.log(newlineCounter);
+// even shorter solution:
+// var lines = fs.readFileSync(process.argv[2], 'utf8').split('\n').length - 1;
+// console.log(lines);
