@@ -1,15 +1,21 @@
 var fs = require('fs');
-var lines = undefined;
+var file = process.argv[2];
 
-function getContents(newlineCount) {
-  fs.readFile(process.argv[2], function doneReading(err, fileContents) {
-    lines = fileContents.toString().split('\n');
-    newlineCount();
-  })
-};
+fs.readFile(file, function (err, fileContents) {
+  if (err) {
+    return console.log(err)
+  }
 
-function newlineCount() {
-  console.log(lines.length - 1)
-};
+  var lines = fileContents.toString().split('\n');
+  console.log(lines.length - 1);
+})
 
-getContents(newlineCount);
+
+// // more concise solution:
+// fs.readFile(file, 'utf8', function (err, fileContents) {
+//   if (err) {
+//     console.log(err);
+//   }
+
+//   console.log(fileContents.toString().split('\n').length - 1)
+// })
