@@ -1,30 +1,42 @@
 var http = require('http');
 var url = require('url');
 
+function parsetime(time) {
+  return {
+    hour: time.getHours(),
+    minute: time.getMinutes(),
+    second: time.getSeconds()
+  };
+}
+
+function unixtime(time) {
+  return { unixtime: time.getTime() };
+}
+
 var server = http.createServer(function (request, response) {
   if (request.method !== 'GET') {
-    return response.end('Please only send GET requests\n')
+    return response.end('Please only send GET requests\n');
   }
 
-  var pathname = url.parse(request.url, true).pathname;
-  var query = url.parse(request.url, true).query;
-  var dateTime = new Date(query.iso);
+  var parsedUrl = url.parse(request.url, true);
+  var pathname = parsedUrl.pathname;
+  var query = parsedUrl.query;
+  var time = new Date(query.iso);
+  var result;
 
   if (pathname === '/api/parsetime') {
-    response.writeHead(200, { 'Content-Type': 'application/json' })
-    response.end(JSON.stringify({
-      "hour": dateTime.getHours(),
-      "minute": dateTime.getMinutes(),
-      "second": dateTime.getSeconds() 
-    }));
+    result = parsetime(time);
+  } else if (pathname === '/api/unixtime') {
+    result = unixtime(time);
   }
 
-  if (pathname === '/api/unixtime') {
-    response.writeHead(200, { 'Content-Type': 'application/json' })
-    response.end(JSON.stringify({ "unixtime": dateTime.getTime()
-    }))
+  if (result) {
+    response.writeHead(200, { 'Content_Type': 'application/json' });
+    response.end(JSON.stringify(result));
+  } else {
+    response.writeHead(404);
+    response.end();
   }
-
-})
+});
 
 server.listen(+process.argv[2]);
