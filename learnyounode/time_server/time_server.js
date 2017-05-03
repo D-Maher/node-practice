@@ -4,18 +4,17 @@ function zeroPad(n) {
   return n < 10 ? '0' + n : n;
 }
 
-var date = new Date();
-var year = date.getFullYear();
-var month = zeroPad(date.getMonth() + 1);
-var day = zeroPad(date.getDate());
-var hour = zeroPad(date.getHours());
-var minute = zeroPad(date.getMinutes());
-
-var dateTimeString = year + "-" + month + "-" + day + " "
- + hour + ":" + minute
+function now() {
+  var d = new Date();
+  return d.getFullYear() + '-' +
+    zeroPad(d.getMonth() + 1) + '-' +
+    zeroPad(d.getDate()) + ' ' +
+    zeroPad(d.getHours()) + ':' +
+    zeroPad(d.getMinutes()) 
+}
 
 var server = net.createServer(function (socket) {
-  socket.end(dateTimeString + "\n");
+  socket.end(now() + '\n');
 });
 
-server.listen(process.argv[2]);
+server.listen(+process.argv[2]);
