@@ -1,20 +1,8 @@
 var net = require('net');
-
-function zeroPad(n) {
-  return n < 10 ? '0' + n : n;
-}
-
-function now() {
-  var d = new Date();
-  return d.getFullYear() + '-' +
-    zeroPad(d.getMonth() + 1) + '-' +
-    zeroPad(d.getDate()) + ' ' +
-    zeroPad(d.getHours()) + ':' +
-    zeroPad(d.getMinutes()) 
-}
+var strftime = require('strftime');
 
 var server = net.createServer(function (socket) {
-  socket.end(now() + '\n');
+  socket.end(strftime('%Y-%m-%d %I:%M\n'));
 });
 
 server.listen(+process.argv[2]);
